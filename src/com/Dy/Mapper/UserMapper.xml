@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里的namespace是为了去绑定那个接口，让xml文件知道对应的是哪个接口 -->
+<mapper namespace="com.Dy.Mapper.UserMapper">
+
+    <!-- id于接口的名字一样 -->
+    <select id="findAllUsers"  resultType="com.Dy.Pojo.User">
+        select * from user        
+    </select>
+ 	<select id="GetUserByNameAndPw"  resultType="com.Dy.Pojo.User">
+        select * from user 
+        where 
+        <if test="username!=null">
+        username=#{username} 
+        </if>
+        <if test="password!=null">
+        and password=#{password}  
+        </if>    
+    </select>
+</mapper>

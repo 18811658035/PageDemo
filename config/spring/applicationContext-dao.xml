@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+    <!-- 让这个配置文件知道从哪边去找 jdbc.properties并获得值 -->
+    <context:property-placeholder
+        location="classpath:jdbc.properties" />
+
+    <!-- 配置数据连接池，这里为了解决硬编码，采用从jdbc.properties读数据的方法 -->
+    <bean id="dataSource"
+        class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!-- 配置工厂，之前没有spring的时候，手动创建工厂需要核心配置文件， 核心配置文件中有数据连接池，但有了spring就把连接池写在了spring的配置文件中 -->
+    <bean id="sqlFactory"
+        class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation"
+            value="classpath:Mybatis/SqlMapConfig.xml" />
+        <!-- 设置数据源  -->
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.Dy.Mapper" />
+	</bean>
+    
+</beans>
